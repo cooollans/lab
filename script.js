@@ -1,23 +1,16 @@
-// script.js
 document.addEventListener('DOMContentLoaded', function() {
-    // ========== DARK MODE - FULLY WORKING ==========
+    // Dark Mode Toggle
     const darkModeToggle = document.getElementById('darkModeToggle');
     const body = document.body;
     
-    // Load saved preference from localStorage
-    const savedMode = localStorage.getItem('darkMode');
-    if (savedMode === 'enabled') {
+    if (localStorage.getItem('darkMode') === 'enabled') {
         body.classList.add('dark-mode');
         if (darkModeToggle) darkModeToggle.textContent = '☀️ Light Mode';
-    } else {
-        if (darkModeToggle) darkModeToggle.textContent = '🌙 Dark Mode';
     }
     
-    // Toggle dark mode function
     if (darkModeToggle) {
         darkModeToggle.addEventListener('click', function() {
             body.classList.toggle('dark-mode');
-            
             if (body.classList.contains('dark-mode')) {
                 localStorage.setItem('darkMode', 'enabled');
                 darkModeToggle.textContent = '☀️ Light Mode';
@@ -28,22 +21,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // ========== EXPLORE TESTS BUTTON - FULLY WORKING ==========
+    // Explore Tests Button - Smooth Scroll
     const exploreBtn = document.getElementById('exploreTestsBtn');
     if (exploreBtn) {
         exploreBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            const testsSection = document.querySelector('.tests-pricing-section');
+            const testsSection = document.getElementById('testsSection');
             if (testsSection) {
-                testsSection.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                testsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     }
     
-    // ========== FORMSPREE FORM SUBMISSION ==========
+    // Formspree Form Submission
     const form = document.getElementById('patientForm');
     const statusDiv = document.getElementById('formStatusMsg');
     
@@ -51,10 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            if (statusDiv) {
-                statusDiv.innerHTML = '⏳ Sending registration details...';
-                statusDiv.style.color = '#0f4c81';
-            }
+            statusDiv.innerHTML = '⏳ Sending registration details...';
+            statusDiv.style.color = '#0f4c81';
             
             const formData = new FormData(form);
             
@@ -66,15 +54,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 if (response.ok) {
-                    if (statusDiv) {
-                        statusDiv.innerHTML = '✅ Registration successful! Details sent to anasnadeem5641@gmail.com';
-                        statusDiv.style.color = 'green';
-                    }
+                    statusDiv.innerHTML = '✅ Registration successful! Details sent to anasnadeem5641@gmail.com';
+                    statusDiv.style.color = 'green';
                     form.reset();
-                    setTimeout(() => {
-                        if (statusDiv) statusDiv.innerHTML = '';
-                    }, 5000);
+                    setTimeout(() => { statusDiv.innerHTML = ''; }, 5000);
                 } else {
-                    const errorData = await response.json();
-                    if (statusDiv) {
-                        statusDiv.innerHTML = '❌ Error: ' + (errorData.error || 'Submission failed. Please try again.');
+                    statusDiv.innerHTML = '❌ Error: Submission failed. Please try again.';
+                    statusDiv.style.color = '#c41e3a';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '❌ Network error. Please check your connection.';
+                statusDiv.style.color = '#c41e3a';
+            }
+        });
+    }
+    
+    // Login Form Handler
+    const loginForm = document.getElementById('staff
